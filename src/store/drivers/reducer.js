@@ -1,5 +1,5 @@
 import { initialState } from "./initialState";
-import { SET_DRIVERS_LIST, REMOVE_DRIVER } from "./const";
+import { SET_DRIVERS_LIST, REMOVE_DRIVER, UPDATE_DRIVER, SELECT_DRIVER } from "./const";
 export default function reducer(state = initialState, action) {
     switch(action.type) {
         case SET_DRIVERS_LIST : {
@@ -14,6 +14,25 @@ export default function reducer(state = initialState, action) {
                 drivers: state.drivers.filter((item, index) => 
                     index !== action.payload
                 )
+            }
+        }
+        case SELECT_DRIVER : {
+            return {
+                ...state,
+                driver: action.payload
+            }
+        }
+        case UPDATE_DRIVER : {
+            return {
+                ...state,
+                driver: null,
+                drivers: state.drivers.map((item, index) => {
+                    if (index === action.payload.idx) {
+                        return action.payload.driver;
+                    } else {
+                        return item;
+                    }
+                })
             }
         }
         default : {

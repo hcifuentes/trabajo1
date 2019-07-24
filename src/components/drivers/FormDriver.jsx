@@ -16,7 +16,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 
 const FormDriver = props => {
-    const [driver, setDriver] = useState(new Driver());
+
+    const [driver, setDriver] = useState(props.driver ? props.driver : new Driver());
 
     const handlerOnControlChange = ({ target }) => {
         setDriver({
@@ -27,6 +28,7 @@ const FormDriver = props => {
 
     const saveForm = () => {
         props.addDriverListAction(driver);
+        setDriver(new Driver());
     }
 
     const clearForm = () => {
@@ -116,8 +118,17 @@ const FormDriver = props => {
     )
 }
 
+const mapStateToProps = (state, ownProps) => {
+    console.log("stateToProps" , state.drivers.driver)
+    return {
+        driver: state.drivers.driver
+    }
+}
+
 const mapDispatchToProps = (dispatch) => ({
     addDriverListAction: payload => dispatch(addDriverListAction(payload))
 })
 
-export default connect(null, mapDispatchToProps)(FormDriver);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormDriver);

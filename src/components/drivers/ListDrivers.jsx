@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { removeDriverFromListAction } from './../../store/drivers/actions';
+import { removeDriverFromListAction, selectDriverAction } from './../../store/drivers/actions';
 
 import DriverTR from './DriverTR';
 import {
@@ -43,10 +43,13 @@ const ListDrivers = (props) => {
         props.removeDriverFromListAction(idx);
     }
 
+    const onCLickUpdateDriver = idx => {
+        console.log("Mandando a actualizar", idx);
+        props.selectDriverAction({...drivers[idx], idx});
+    }
+
     const containsText = (text) => 
         text && text.toString().toUpperCase().search(filter.toUpperCase()) > -1; 
-
-        console.log(drivers)
     return (
         <div>
             <Paper>
@@ -79,6 +82,7 @@ const ListDrivers = (props) => {
                                     if(isFiltered(driver)){
                                         return <DriverTR 
                                                     onCLickRemoveDriver={onCLickRemoveDriver}
+                                                    onCLickUpdateDriver={onCLickUpdateDriver}
                                                     key={index} 
                                                     driver={driver} 
                                                     index={index} />
@@ -96,14 +100,15 @@ const ListDrivers = (props) => {
 
 // export default ListDrivers;
 
-const mapStateToProps = ({drivers}, ownProps) => {
+const mapStateToProps = (reducer, ownProps) => {
     return {
-        drivers: drivers
+        drivers: reducer.drivers
     }
 } 
 
 const mapDispatchToProps = (dispatch) => ({
-    removeDriverFromListAction: payload => dispatch(removeDriverFromListAction(payload))
+    removeDriverFromListAction: payload => dispatch(removeDriverFromListAction(payload)),
+    selectDriverAction: payload => dispatch(selectDriverAction(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListDrivers);
