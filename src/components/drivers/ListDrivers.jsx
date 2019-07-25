@@ -15,23 +15,19 @@ import {
 
 const ListDrivers = (props) => {
     
-    const { drivers: {drivers} } = props;
-    const [filter, setFIlter] = useState('');
+    const { adminDrivers: {drivers} } = props;
 
-    const INACTIVO = 'Inactivo';
-    const ACTIVO = 'Activo';
+    const [filterText, setFilterText] = useState('');
 
-    const handlerFilterChange = ({ target: {value} }) => setFIlter(value);
+    const handlerFilterChange = ({ target: {value} }) => setFilterText(value);
     
     /** Metodo de filtro de conductores por sus campos*/
     const isFiltered = (d) => {
         if(
-            containsText(d.rut) || 
-            containsText(d.name) || 
-            containsText(d.licenceType) || 
-            containsText(d.age) ||
-            ( d.active && containsText(ACTIVO)) || 
-            ( !d.active && containsText(INACTIVO)) ){
+            containsText(d.rut) ||
+            containsText(d.name) ||
+            containsText(d.licenceType) ||
+            containsText(d.age) ){
                 return true;
             } else {
                 return false;
@@ -39,17 +35,15 @@ const ListDrivers = (props) => {
     }
 
     const onCLickRemoveDriver = idx => {
-        console.log("eliminando");
         props.removeDriverFromListAction(idx);
     }
 
     const onCLickUpdateDriver = idx => {
-        console.log("Mandando a actualizar", idx);
         props.selectDriverAction({...drivers[idx], idx});
     }
 
     const containsText = (text) => 
-        text && text.toString().toUpperCase().search(filter.toUpperCase()) > -1; 
+        text && text.toString().toUpperCase().search(filterText.toUpperCase()) > -1; 
     return (
         <div>
             <Paper>
@@ -58,7 +52,7 @@ const ListDrivers = (props) => {
                 <Input
                     name="filter"
                     onChange={handlerFilterChange}
-                    value={filter}
+                    value={filterText}
                     aria-describedby="Ingrese texto para filtrar conductores" />
             </FormControl>
             </Paper>
@@ -100,9 +94,9 @@ const ListDrivers = (props) => {
 
 // export default ListDrivers;
 
-const mapStateToProps = (reducer, ownProps) => {
+const mapStateToProps = ({drivers}, ownProps) => {
     return {
-        drivers: reducer.drivers
+        adminDrivers: drivers
     }
 } 
 

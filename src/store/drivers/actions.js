@@ -8,8 +8,8 @@ export const removeDriverFromListAction = idx => (
     dispatch => dispatch({type: REMOVE_DRIVER, payload: idx})
 )
 
-export const updateDriverAction = (idx, driver) => (
-    dispatch => dispatch({type: UPDATE_DRIVER, payload: {idx, driver}})
+export const updateDriverAction = (driver) => (
+    dispatch => dispatch({type: UPDATE_DRIVER, payload: driver})
 )
 
 export const selectDriverAction = (driver) => {

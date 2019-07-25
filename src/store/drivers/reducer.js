@@ -3,10 +3,11 @@ import { SET_DRIVERS_LIST, REMOVE_DRIVER, UPDATE_DRIVER, SELECT_DRIVER } from ".
 export default function reducer(state = initialState, action) {
     switch(action.type) {
         case SET_DRIVERS_LIST : {
-            return {
+            const obj = {
                 ...state,
                 drivers: state.drivers.concat(action.payload)
             }
+            return obj;
         }
         case REMOVE_DRIVER : {
             return {
@@ -28,7 +29,7 @@ export default function reducer(state = initialState, action) {
                 driver: null,
                 drivers: state.drivers.map((item, index) => {
                     if (index === action.payload.idx) {
-                        return action.payload.driver;
+                        return action.payload;
                     } else {
                         return item;
                     }
