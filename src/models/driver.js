@@ -1,10 +1,21 @@
-class Driver {
+export default class Driver {
     rut = '';
     name = '';
     licenceType = '';
-    age = 0;
+    age = '';
     active = false;
 
 }
 
-export default Driver;
+export class DriverForm {
+    constructor(init) {
+        this.rut = init;
+        this.name = init;
+        this.licenceType = init;
+        this.age = init;
+    }
+}
+
+
+
+

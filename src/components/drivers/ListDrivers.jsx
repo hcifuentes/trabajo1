@@ -14,47 +14,43 @@ import {
 
 
 const ListDrivers = (props) => {
-    
-    const { adminDrivers: {drivers} } = props;
+
+    const { adminDrivers: { drivers } } = props;
 
     const [filterText, setFilterText] = useState('');
 
-    const handlerFilterChange = ({ target: {value} }) => setFilterText(value);
-    
+    const handlerFilterChange = ({ target: { value } }) => setFilterText(value);
+
     /** Metodo de filtro de conductores por sus campos*/
     const isFiltered = (d) => {
-        if(
+        return (
             containsText(d.rut) ||
             containsText(d.name) ||
             containsText(d.licenceType) ||
-            containsText(d.age) ){
-                return true;
-            } else {
-                return false;
-            }
+            containsText(d.age)
+        )
     }
 
-    const onCLickRemoveDriver = idx => {
-        props.removeDriverFromListAction(idx);
-    }
+    const onCLickRemoveDriver = idx => props.removeDriverFromListAction(idx);
 
-    const onCLickUpdateDriver = idx => {
-        props.selectDriverAction({...drivers[idx], idx});
-    }
+    const onCLickUpdateDriver = idx => props.selectDriverAction({ ...drivers[idx], idx });
 
-    const containsText = (text) => 
-        text && text.toString().toUpperCase().search(filterText.toUpperCase()) > -1; 
+    const containsText = (text) =>
+        text && text.toString().toUpperCase().search(filterText.toUpperCase()) > -1;
+
     return (
-        <div>
+        <Paper>
+            <h2>Listado de conductores</h2>
             <Paper>
-            <FormControl row="true">
-                <InputLabel htmlFor="rut">Ingrese texto para filtrar conductores</InputLabel>
-                <Input
-                    name="filter"
-                    onChange={handlerFilterChange}
-                    value={filterText}
-                    aria-describedby="Ingrese texto para filtrar conductores" />
-            </FormControl>
+                <FormControl row="false" fullWidth={true}> 
+                    <InputLabel htmlFor="rut" xs="12">Ingrese texto para filtrar conductores</InputLabel>
+                    <Input
+                        xs="12"
+                        name="filter"
+                        onChange={handlerFilterChange}
+                        value={filterText}
+                        aria-describedby="Ingrese texto para filtrar conductores" />
+                </FormControl>
             </Paper>
             <Paper>
                 <Table>
@@ -65,21 +61,20 @@ const ListDrivers = (props) => {
                             <TableCell align="center">Tipo licencia</TableCell>
                             <TableCell align="center">Edad</TableCell>
                             <TableCell align="center">Estado</TableCell>
-                            <TableCell align="center">Eliminar</TableCell>
-                            <TableCell align="center">Editar</TableCell>
+                            <TableCell align="center">Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             drivers && drivers.map(
                                 (driver, index) => {
-                                    if(isFiltered(driver)){
-                                        return <DriverTR 
-                                                    onCLickRemoveDriver={onCLickRemoveDriver}
-                                                    onCLickUpdateDriver={onCLickUpdateDriver}
-                                                    key={index} 
-                                                    driver={driver} 
-                                                    index={index} />
+                                    if (isFiltered(driver)) {
+                                        return <DriverTR
+                                            onCLickRemoveDriver={onCLickRemoveDriver}
+                                            onCLickUpdateDriver={onCLickUpdateDriver}
+                                            key={index}
+                                            driver={driver}
+                                            index={index} />
                                     } else {
                                         return false;
                                     }
@@ -88,17 +83,17 @@ const ListDrivers = (props) => {
                     </TableBody>
                 </Table>
             </Paper>
-        </div>
+        </Paper>
     )
 }
 
 // export default ListDrivers;
 
-const mapStateToProps = ({drivers}, ownProps) => {
+const mapStateToProps = ({ drivers }, ownProps) => {
     return {
         adminDrivers: drivers
     }
-} 
+}
 
 const mapDispatchToProps = (dispatch) => ({
     removeDriverFromListAction: payload => dispatch(removeDriverFromListAction(payload)),
