@@ -9,6 +9,10 @@ import {
     InputLabel,
     Table,
     Paper,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
     TableHead, TableBody, TableRow, TableCell
 } from '@material-ui/core';
 
@@ -18,16 +22,21 @@ const ListDrivers = (props) => {
     const { adminDrivers: { drivers } } = props;
 
     const [filterText, setFilterText] = useState('');
+    const [filterState, setFilterState] = useState('0');
 
     const handlerFilterChange = ({ target: { value } }) => setFilterText(value);
+
+    const handleFilterStateChange = ({ target: { value } }) => setFilterState(value);
 
     /** Metodo de filtro de conductores por sus campos*/
     const isFiltered = (d) => {
         return (
-            containsText(d.rut) ||
+            (containsText(d.rut) ||
             containsText(d.name) ||
             containsText(d.licenceType) ||
-            containsText(d.age)
+            containsText(d.age))
+            &&
+            (filterState === '0' || (filterState === '1' && d.active) || (filterState === '2' && !d.active))
         )
     }
 
@@ -50,6 +59,21 @@ const ListDrivers = (props) => {
                         onChange={handlerFilterChange}
                         value={filterText}
                         aria-describedby="Ingrese texto para filtrar conductores" />
+                </FormControl>
+            </Paper>
+            <Paper>
+                <FormControl row="true"> 
+                <FormLabel component="legend">Estado del conductor</FormLabel>
+                <RadioGroup
+                    aria-label="Estado"
+                    name="stateFilter"
+                    value={filterState}
+                    onChange={handleFilterStateChange}
+                >
+                    <FormControlLabel value="0" control={<Radio />} label="Todos" />
+                    <FormControlLabel value="1" control={<Radio />} label="Activos" />
+                    <FormControlLabel value="2" control={<Radio />} label="Inactivos" />
+                </RadioGroup>
                 </FormControl>
             </Paper>
             <Paper>
